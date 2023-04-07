@@ -1,69 +1,101 @@
-let userScore = 0;
-let computerScore = 0;
-const userScore_span = document.getElementById("user-score");
-const computerScore_span = document.getElementById("computer-score");
-const scoreBoard_div = document.querySelector(".score-board");
-const result_div = document.getElementById("resultText");
-const rock_div = document.getElementById("r");
-const paper_div = document.getElementById("p");
-const scissors_div = document.getElementById("s");
+const root = document.getElementById("root");
 
-function getComputerChoice(){
-    const choices = ['r','p','s'];
-    const randomNumber = Math.floor(Math.random()*3)
-    return choices[randomNumber]
-};
+function getComputerChoice() {
+    const choices = ["r", "p", "s"];
+    const randomNumber = Math.floor(Math.random() * 3);
+    return choices[randomNumber];
+}
 
-function win(){
-    userScore++;
-    userScore_span.innerHTML = userScore;
-    computerScore_span.innerHTML = computerScore;
-    result_div.innerHTML = "You Win!!!";
-};
+function MyApp() {
+    const [userScore, setUserScore] = React.useState(0);
+    const [computerScore, setComputerScore] = React.useState(0);
+    const [resultText, setResultText] = React.useState(
+        "Paper Covers Rock, you Won!"
+    );
 
-function lose(){
-    computerScore++;
-    userScore_span.innerHTML = userScore;
-    computerScore_span.innerHTML = computerScore;
-    result_div.innerHTML = "You're a loser :(";
-};
-
-function draw(){
-    result_div.innerHTML = "Its a draw";
-
-};
-
-function game(userChoice){
-    const computerChoice = getComputerChoice();
-    switch(userChoice + computerChoice){
-        case "rs":
-        case "pr":
-        case "sp":
-        win();
-            break;
-        case "rp":
-        case "ps":
-        case "sr":
-        lose();
-            break;
-        case "rr":
-        case "pp":
-        case "ss":
-        draw();
-            break;
+    function win() {
+        setUserScore(userScore + 1);
+        setResultText("You Win!!!");
     }
-};
 
-function main(){
-    rock_div.addEventListener('click', function() {
-        game("r");
-    });
-    paper_div.addEventListener('click', function() {
-        game("p");  
-    });
-    scissors_div.addEventListener('click', function() {
-        game("s");
-    });
-};
+    function lose() {
+        setComputerScore(computerScore + 1);
+        setResultText("You lose");
+    }
 
-main();
+    function draw() {
+        setResultText("Its a draw");
+    }
+    function game(userChoice) {
+        const computerChoice = getComputerChoice();
+        switch (userChoice + computerChoice) {
+            case "rs":
+            case "pr":
+            case "sp":
+                win();
+                break;
+            case "rp":
+            case "ps":
+            case "sr":
+                lose();
+                break;
+            case "rr":
+            case "pp":
+            case "ss":
+                draw();
+                break;
+        }
+    }
+    return (
+        <div>
+            <header>
+                <h1>Rock Paper Scissors</h1>
+            </header>
+
+            <div className="score-board">
+                <div id="user-label" class="badge">
+                    User
+                </div>
+                <div id="computer-label" className="badge">
+                    Computer
+                </div>
+                <span id="user-score">{userScore}</span>:
+                <span id="computer-score">{computerScore}</span>
+            </div>
+            <div class="result">
+                <p id="resultText">{resultText}</p>
+            </div>
+            <div class="choices">
+                <div
+                    onClick={() => {
+                        game("r");
+                    }}
+                    id="r"
+                    class="choice"
+                >
+                    <img src="Images/rock.png" alt="rock" />
+                </div>
+                <div
+                    onClick={() => {
+                        game("p");
+                    }}
+                    id="p"
+                    class="choice"
+                >
+                    <img src="Images/paper.png" alt="paper" />
+                </div>
+                <div
+                    onClick={() => {
+                        game("s");
+                    }}
+                    id="s"
+                    class="choice"
+                >
+                    <img src="Images/sccisors.png" alt="scissors" />
+                </div>
+            </div>
+            <p id="action-message">Make your Move.</p>
+        </div>
+    );
+}
+ReactDOM.render(<MyApp />, root);
